@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="no-timer" hidden>
+      <div class="tab-label">
+        <div class="title" id="current-title"></div>
+      </div>
+      <div class="presets">
+        <button class="preset" data-seconds="600">10m</button>
+        <button class="preset" data-seconds="1200">20m</button>
+        <button class="preset" data-seconds="1800">30m</button>
+        <button class="preset" data-seconds="3600">60m</button>
+      </div>
+      <label class="custom">
+        Or seconds:
+        <input id="custom-seconds" type="number" min="1" max="86400" />
+      </label>
+      <button id="start-btn" class="primary">Start timer</button>
+      <p class="error" id="start-error" hidden></p>
+    </section>
+
+    <section id="active-timer" hidden>
+      <div class="countdown" id="current-countdown">--:--</div>
+      <div class="actions">
+        <button id="extend-btn">+5 min</button>
+        <button id="cancel-btn" class="danger">Cancel timer</button>
+      </div>
+    </section>
+
+    <section id="others" hidden>
+      <h3 id="others-heading">Other active timers</h3>
+      <ul id="others-list"></ul>
+    </section>
+
+    <p id="warning" class="warning" hidden></p>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

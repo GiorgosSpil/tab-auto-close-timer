@@ -1,0 +1,58 @@
+:root {
+  --bg: #fff;
+  --fg: #222;
+  --muted: #666;
+  --primary: #4a90e2;
+  --danger: #d14;
+  --border: #ddd;
+}
+body {
+  width: 320px;
+  font-family: -apple-system, Segoe UI, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  margin: 0;
+  padding: 12px;
+  box-sizing: border-box;
+}
+main { display: flex; flex-direction: column; gap: 12px; }
+.tab-label .title {
+  font-size: 13px; color: var(--muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.presets { display: flex; gap: 6px; }
+.preset {
+  flex: 1; padding: 6px; border: 1px solid var(--border);
+  background: #f6f6f6; border-radius: 4px; cursor: pointer;
+}
+.preset.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+.custom { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.custom input { flex: 1; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; }
+button.primary {
+  padding: 8px; border: 0; background: var(--primary);
+  color: #fff; border-radius: 4px; cursor: pointer; font-size: 14px;
+}
+button.danger {
+  padding: 6px 10px; border: 1px solid var(--danger);
+  color: var(--danger); background: #fff; border-radius: 4px; cursor: pointer;
+}
+.countdown { font-size: 40px; text-align: center; font-variant-numeric: tabular-nums; }
+.actions { display: flex; gap: 6px; }
+.actions button { flex: 1; }
+#others h3 { font-size: 12px; color: var(--muted); margin: 0 0 6px; text-transform: uppercase; }
+#others ul { list-style: none; padding: 0; margin: 0; }
+#others li {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 0; font-size: 12px; border-top: 1px solid var(--border);
+}
+#others li .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#others li .time { font-variant-numeric: tabular-nums; color: var(--muted); }
+#others li button {
+  background: transparent; border: 0; color: var(--muted);
+  font-size: 16px; cursor: pointer; padding: 0 4px;
+}
+.error, .warning {
+  font-size: 12px; margin: 0; padding: 6px; border-radius: 4px;
+}
+.error { color: var(--danger); background: #fdecec; }
+.warning { color: #8a5a00; background: #fff7e0; }
