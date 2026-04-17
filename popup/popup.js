@@ -61,22 +61,38 @@ async function render() {
   }
 }
 
+function setCustomFields(totalSeconds) {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  document.getElementById('custom-hours').value = String(h);
+  document.getElementById('custom-minutes').value = String(m);
+  document.getElementById('custom-seconds').value = String(s);
+}
+
+function readCustomSeconds() {
+  const h = Number(document.getElementById('custom-hours').value) || 0;
+  const m = Number(document.getElementById('custom-minutes').value) || 0;
+  const s = Number(document.getElementById('custom-seconds').value) || 0;
+  return h * 3600 + m * 60 + s;
+}
+
 function wireNoTimerControls() {
   for (const btn of document.querySelectorAll('.preset')) {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.preset').forEach((b) => b.classList.remove('selected'));
       btn.classList.add('selected');
-      document.getElementById('custom-seconds').value = btn.dataset.seconds;
+      setCustomFields(Number(btn.dataset.seconds));
     });
   }
 
   document.getElementById('start-btn').addEventListener('click', async () => {
     const err = document.getElementById('start-error');
     err.hidden = true;
-    const seconds = Number(document.getElementById('custom-seconds').value);
+    const seconds = readCustomSeconds();
     if (!Number.isFinite(seconds) || seconds < MIN_SECONDS || seconds > MAX_SECONDS) {
       err.hidden = false;
-      err.textContent = `Enter a value between ${MIN_SECONDS} and ${MAX_SECONDS} seconds.`;
+      err.textContent = `Enter a total between ${MIN_SECONDS} second and ${MAX_SECONDS} seconds (24h).`;
       return;
     }
     const resp = await chrome.runtime.sendMessage({

@@ -26,8 +26,13 @@ main { display: flex; flex-direction: column; gap: 12px; }
   background: #f6f6f6; border-radius: 4px; cursor: pointer;
 }
 .preset.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
-.custom { display: flex; align-items: center; gap: 6px; font-size: 13px; }
-.custom input { flex: 1; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; }
+.custom { display: flex; align-items: center; gap: 4px; font-size: 13px; }
+.custom .custom-label { margin-right: 4px; }
+.custom input {
+  width: 48px; padding: 4px 6px; border: 1px solid var(--border);
+  border-radius: 4px; text-align: center; font-variant-numeric: tabular-nums;
+}
+.custom .sep { color: var(--muted); font-size: 12px; }
 button.primary {
   padding: 8px; border: 0; background: var(--primary);
   color: #fff; border-radius: 4px; cursor: pointer; font-size: 14px;

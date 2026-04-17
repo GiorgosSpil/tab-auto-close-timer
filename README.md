@@ -13,7 +13,7 @@ Chrome extension that closes a tab after a configurable timer while keeping the 
 
 1. Open the tab you want to auto-close.
 2. Click the extension icon.
-3. Pick a preset (1h / 5h 59m / 10h) or enter any duration in seconds (1–86400).
+3. Pick a preset (1h / 5h 59m / 10h) or enter a custom duration in the **hours / minutes / seconds** fields (total 1 second to 24 hours).
 4. Click **Start timer**.
 
 While any timer is active:

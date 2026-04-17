@@ -15,10 +15,15 @@
         <button class="preset" data-seconds="21540">5h 59m</button>
         <button class="preset" data-seconds="36000">10h</button>
       </div>
-      <label class="custom">
-        Or seconds:
-        <input id="custom-seconds" type="number" min="1" max="86400" />
-      </label>
+      <div class="custom">
+        <span class="custom-label">Custom:</span>
+        <input id="custom-hours" type="number" min="0" max="24" value="0" aria-label="Hours" />
+        <span class="sep">h</span>
+        <input id="custom-minutes" type="number" min="0" max="59" value="0" aria-label="Minutes" />
+        <span class="sep">m</span>
+        <input id="custom-seconds" type="number" min="0" max="59" value="0" aria-label="Seconds" />
+        <span class="sep">s</span>
+      </div>
       <button id="start-btn" class="primary">Start timer</button>
       <p class="error" id="start-error" hidden></p>
     </section>
