@@ -13,7 +13,7 @@ Chrome extension that closes a tab after a configurable timer while keeping the 
 
 1. Open the tab you want to auto-close.
 2. Click the extension icon.
-3. Pick a preset (10m / 20m / 30m / 60m) or enter any duration in seconds (1–86400).
+3. Pick a preset (1h / 5h 59m / 10h) or enter any duration in seconds (1–86400).
 4. Click **Start timer**.
 
 While any timer is active:
@@ -22,6 +22,18 @@ While any timer is active:
 - The toolbar badge shows a dot as a reminder.
 
 Click the icon again to see the countdown, cancel, add +5 minutes, or manage other active timers.
+
+## Updating the extension after code changes
+
+Chrome does not auto-reload unpacked extensions. After editing any file in this folder:
+
+1. Open `chrome://extensions`.
+2. Find the **Tab Auto-Close Timer** card.
+3. Click the circular **reload** icon on the card.
+
+If you changed the popup UI, close and reopen the popup to see the update. If you changed `manifest.json` or the service worker, the reload will restart the service worker too — any running timers stored in `chrome.storage.session` are cleared (sessions reset on extension reload).
+
+Tip: to see service-worker logs while iterating, click **service worker** on the extension's card to open its DevTools.
 
 ## Manual smoke test
 
