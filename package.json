@@ -1,0 +1,16 @@
+{
+  "name": "tab-auto-close-timer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "jsdom": "^25.0.0",
+    "vitest": "^2.1.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Auto-Close Timer",
+  "version": "0.1.0",
+  "description": "Close a tab after a configurable timer while keeping the screen awake.",
+  "permissions": ["tabs", "alarms", "power", "storage"],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Tab Auto-Close Timer"
+  }
+}
