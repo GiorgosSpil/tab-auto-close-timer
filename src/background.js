@@ -9,6 +9,9 @@ import { updateWakeLock } from './wake-lock.js';
 import { updateBadge } from './badge.js';
 import { KEEPALIVE_PORT_NAME } from './constants.js';
 
+chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })
+  .catch(console.error);
+
 chrome.alarms.onAlarm.addListener((alarm) => {
   handleAlarmFired(alarm).catch(console.error);
 });
@@ -21,7 +24,7 @@ chrome.runtime.onStartup.addListener(() => {
   Promise.all([updateWakeLock(), updateBadge()]).catch(console.error);
 });
 
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
     try {
       switch (msg?.type) {
@@ -36,6 +39,9 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         case 'extend':
           await extendTimer(msg.tabId);
           sendResponse({ ok: true });
+          break;
+        case 'whoami':
+          sendResponse({ ok: true, tabId: sender?.tab?.id ?? null });
           break;
         default:
           sendResponse({ ok: false, error: 'unknown-type' });

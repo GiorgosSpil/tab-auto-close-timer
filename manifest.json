@@ -11,5 +11,13 @@
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "Tab Auto-Close Timer"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://learn.practica.gr/*"],
+      "js": ["src/content/auto-advance.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
 }
