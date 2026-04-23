@@ -1,5 +1,12 @@
 import { formatRemaining } from '../src/formatters.js';
-import { MIN_SECONDS, MAX_SECONDS } from '../src/constants.js';
+import {
+  MIN_SECONDS,
+  MAX_SECONDS,
+  HEARTBEAT_STORAGE_KEY,
+  DEFAULT_HEARTBEAT_MINUTES,
+  MIN_HEARTBEAT_MINUTES,
+  MAX_HEARTBEAT_MINUTES
+} from '../src/constants.js';
 
 let currentTab = null;
 let tickHandle = null;
@@ -109,6 +116,23 @@ function wireNoTimerControls() {
   });
 }
 
+async function wireKeepaliveControl() {
+  const input = document.getElementById('keepalive-min');
+  const stored = (await chrome.storage.local.get(HEARTBEAT_STORAGE_KEY))[HEARTBEAT_STORAGE_KEY];
+  const initial = typeof stored === 'number' ? stored : DEFAULT_HEARTBEAT_MINUTES;
+  input.value = String(initial);
+
+  const commit = async () => {
+    let value = Number(input.value);
+    if (!Number.isFinite(value)) value = DEFAULT_HEARTBEAT_MINUTES;
+    value = Math.min(MAX_HEARTBEAT_MINUTES, Math.max(MIN_HEARTBEAT_MINUTES, Math.round(value)));
+    input.value = String(value);
+    await chrome.storage.local.set({ [HEARTBEAT_STORAGE_KEY]: value });
+  };
+  input.addEventListener('change', commit);
+  input.addEventListener('blur', commit);
+}
+
 function wireActiveControls() {
   document.getElementById('cancel-btn').addEventListener('click', async () => {
     if (!currentTab) return;
@@ -124,6 +148,7 @@ function wireActiveControls() {
 
 wireNoTimerControls();
 wireActiveControls();
+wireKeepaliveControl();
 init();
 
 window.addEventListener('unload', () => {

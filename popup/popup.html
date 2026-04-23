@@ -26,6 +26,11 @@
       </div>
       <button id="start-btn" class="primary">Start timer</button>
       <p class="error" id="start-error" hidden></p>
+      <div class="keepalive">
+        <label for="keepalive-min">Session keepalive every</label>
+        <input id="keepalive-min" type="number" min="1" max="60" step="1" />
+        <span class="sep">min</span>
+      </div>
     </section>
 
     <section id="active-timer" hidden>

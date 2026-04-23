@@ -5,3 +5,7 @@ export const MAX_SECONDS = 86_400;
 export const EXTEND_MS = 5 * 60 * 1000;
 export const BADGE_COLOR = '#4a90e2';
 export const KEEPALIVE_PORT_NAME = 'timer-keepalive';
+export const HEARTBEAT_STORAGE_KEY = 'keepaliveMinutes';
+export const DEFAULT_HEARTBEAT_MINUTES = 5;
+export const MIN_HEARTBEAT_MINUTES = 1;
+export const MAX_HEARTBEAT_MINUTES = 60;

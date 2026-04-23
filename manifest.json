@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Auto-Close Timer",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Close a tab after a configurable timer while keeping the screen awake.",
   "permissions": ["tabs", "alarms", "power", "storage"],
   "background": {
@@ -13,6 +13,13 @@
     "default_title": "Tab Auto-Close Timer"
   },
   "content_scripts": [
+    {
+      "matches": ["*://learn.practica.gr/*"],
+      "js": ["src/content/heartbeat-sniff.js"],
+      "all_frames": true,
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
     {
       "matches": ["*://learn.practica.gr/*"],
       "js": ["src/content/auto-advance.js"],

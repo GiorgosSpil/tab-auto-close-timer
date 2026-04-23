@@ -1,4 +1,6 @@
 const TIMERS_KEY = 'timers';
+const HEARTBEAT_STORAGE_KEY = 'keepaliveMinutes';
+const DEFAULT_HEARTBEAT_MINUTES = 5;
 const PLAY_BUTTON_SELECTOR = '.play-controls-container__play-pause-button';
 const NEXT_BUTTON_SELECTOR = '.navigation-controls__button_next';
 const PLAY_PATH_PREFIX = 'M5 16.3087';
@@ -11,6 +13,9 @@ let observer = null;
 let observedButton = null;
 let pollHandle = null;
 let pendingClick = null;
+let heartbeatUrl = null;
+let heartbeatHandle = null;
+let heartbeatIntervalMs = DEFAULT_HEARTBEAT_MINUTES * 60 * 1000;
 
 function isPaused(button) {
   const path = button.querySelector('svg path');
@@ -65,6 +70,39 @@ function attachObserver() {
   checkAndClick();
 }
 
+function pingHeartbeat() {
+  if (!heartbeatUrl) return;
+  fetch(heartbeatUrl, { credentials: 'include', cache: 'no-store' }).catch(() => {});
+}
+
+function startHeartbeat() {
+  if (heartbeatHandle !== null) return;
+  if (!heartbeatUrl) return;
+  heartbeatHandle = setInterval(pingHeartbeat, heartbeatIntervalMs);
+}
+
+async function loadHeartbeatInterval() {
+  const { [HEARTBEAT_STORAGE_KEY]: minutes } = await chrome.storage.local.get(HEARTBEAT_STORAGE_KEY);
+  if (typeof minutes === 'number' && minutes > 0) {
+    heartbeatIntervalMs = minutes * 60 * 1000;
+  }
+}
+
+function applyHeartbeatIntervalChange(minutes) {
+  heartbeatIntervalMs = (typeof minutes === 'number' && minutes > 0 ? minutes : DEFAULT_HEARTBEAT_MINUTES) * 60 * 1000;
+  if (heartbeatHandle !== null) {
+    stopHeartbeat();
+    startHeartbeat();
+  }
+}
+
+function stopHeartbeat() {
+  if (heartbeatHandle !== null) {
+    clearInterval(heartbeatHandle);
+    heartbeatHandle = null;
+  }
+}
+
 function start() {
   if (pollHandle !== null) return;
   attachObserver();
@@ -75,6 +113,7 @@ function start() {
     }
     checkAndClick();
   }, POLL_INTERVAL_MS);
+  startHeartbeat();
 }
 
 function stop() {
@@ -91,7 +130,17 @@ function stop() {
     clearTimeout(pendingClick);
     pendingClick = null;
   }
+  stopHeartbeat();
 }
+
+window.addEventListener('message', (e) => {
+  if (e.source !== window) return;
+  if (e.data?.source !== 'tact-heartbeat') return;
+  const url = e.data.url;
+  if (typeof url !== 'string') return;
+  heartbeatUrl = url;
+  if (enabled) startHeartbeat();
+});
 
 async function resolveMyTabId() {
   if (myTabId !== null) return myTabId;
@@ -119,8 +168,13 @@ async function refreshState() {
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area !== 'session' || !(TIMERS_KEY in changes)) return;
-  refreshState();
+  if (area === 'session' && TIMERS_KEY in changes) {
+    refreshState();
+    return;
+  }
+  if (area === 'local' && HEARTBEAT_STORAGE_KEY in changes) {
+    applyHeartbeatIntervalChange(changes[HEARTBEAT_STORAGE_KEY].newValue);
+  }
 });
 
-refreshState();
+loadHeartbeatInterval().then(refreshState);
